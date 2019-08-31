@@ -1,0 +1,31 @@
+#internal-menu {
+  background-color: burlywood;
+  display: flex;
+  padding: 1rem;
+}
+
+#internal-menu span { margin-right: 5px; }
+
+#internal-menu ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+#internal-menu ul li {
+  display: inline-block;
+}
+
+#internal-menu ul li button {
+  background: transparent;
+  border: none;
+}
+
+#internal-menu ul li button:hover {
+  color: white;
+}
+
+#internal-body {
+  margin: auto;
+  padding: 1.5rem 2rem;
+}

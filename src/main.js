@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 const Store = require('electron-store');
 const schema = {
   gtaSALocation: {
@@ -66,7 +65,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on('getSAPath', (event, message) => {
+ipcMain.on('getSAPath', (event) => {
   console.log('Pinged!');
   event.returnValue = store.get('gtaSALocation');
 });
@@ -75,4 +74,14 @@ ipcMain.on('getSAPath', (event, message) => {
 ipcMain.on('updateSAPath', (event, message) => {
   console.log('Saving SA Path');
   store.set('gtaSALocation', message);
+});
+
+ipcMain.on('getLastMenu', (event) => {
+  console.log(store.get('lastMenu'));
+  event.returnValue = store.get('lastMenu');
 })
+
+ipcMain.on('rememberLastMenu', (event, message) => {
+  console.log('Remembering Last Menu');
+  store.set('lastMenu', message);
+});

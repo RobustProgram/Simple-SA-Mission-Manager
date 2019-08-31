@@ -3,20 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <title>GTA SA Mission Manager</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="general.css" />
+    <link rel="stylesheet" href="id.css" />
+    <link rel="stylesheet" href="class.css" />
   </head>
   <body>
-    <div id="internal-menu">
-      <span>GTA SA Mission Manager</span>|
-      <ul>
-        <li>Home</li>
-      </ul>
+    <div id="validation-module">
+      The file directory does not point to a valid GTA SA directory!
+      <button id="find-sa-directory">Find GTA SA Directory</button>
     </div>
-    <div id="internal-body">
-      <div id="information">GTA SA Mission Manager is loading!</div>
-      <div id="need-valid-path" hidden>
-        The file directory does not point to a valid GTA SA directory!
-        <button id="find-sa-directory">Find GTA SA Directory</button>
+    <div id="main-body" hidden>
+      <div id="internal-menu">
+        <span>GTA SA Mission Manager</span>
+        <span>|</span>
+        <ul>
+          <li><button>Home</button></li>
+          <li><button>Missions</button></li>
+          <li><button id="btn-settings">Settings</button></li>
+        </ul>
+      </div>
+      <div id="internal-body">
       </div>
     </div>
     <script>require('./index.js');</script>

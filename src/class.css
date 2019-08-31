@@ -15,9 +15,11 @@
   border: 1px solid #001f3f;
   background-color: #0074D9;
   color: #FFFFFF;
+  font-family: "Raleway", sans-serif;
   padding: 7px 25px;
 }
 
 .form .form-btn:hover {
   background: #001f3f;
+  cursor: pointer;
 }

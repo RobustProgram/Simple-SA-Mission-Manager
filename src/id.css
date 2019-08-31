@@ -19,10 +19,13 @@
 #internal-menu ul li button {
   background: transparent;
   border: none;
+  font-family: "Raleway", sans-serif;
+  font-size: 15px;
 }
 
 #internal-menu ul li button:hover {
   color: white;
+  cursor: pointer;
 }
 
 #internal-body {

@@ -1,22 +1,32 @@
+/************ OTHER STUFF *************/
+#main-body {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+}
+#internal-body {
+  display: none;
+  flex-grow: 1;
+  padding: 1.5rem 3%;
+  width: 94%;
+}
+
 /*********** MENU CODE ***********/
 #internal-menu {
-  background-color: burlywood;
+  background-color: #deb887;
   display: flex;
   padding: 1rem;
 }
 
 #internal-menu span { margin-right: 5px; }
-
 #internal-menu ul {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
-
 #internal-menu ul li {
   display: inline-block;
 }
-
 #internal-menu ul li button {
   background: transparent;
   border: none;
@@ -24,31 +34,29 @@
   font-size: 15px;
   padding: 0px 10px;
 }
-
 #internal-menu ul li button:hover {
   color: white;
   cursor: pointer;
 }
-
-#internal-body {
-  margin: auto;
-  padding: 1.5rem 2rem;
+#internal-menu ul li button:disabled {
+  color: #ffe6c7;
+  cursor: not-allowed;
 }
 
 /********* LOADING SCREEN *********/
-#validation-module {
+#notification {
   display: flex;
   flex-flow: column;
-  height: 100vh;
+  flex-grow: 1;
 }
-#validation-module div {margin: 5px;}
-#validation-module #validation-textarea {
+#notification div {margin: 5px;}
+#notification #notification-textarea {
   background-color: white;
   border: 1px solid black;
   padding: 5px;
   flex-grow: 1;
 }
-#validation-module #validation-textarea .notification{
+#notification #notification-textarea .notification{
   font-family: 'Courier New';
   font-size: 12px;
 }

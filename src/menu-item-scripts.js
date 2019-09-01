@@ -24,6 +24,6 @@ module.exports.MENU_ITEM_SCRIPTS = {
 };
 
 module.exports.ENUM_ID = {
-  'settings' : 'settings.html',
-  'about' : 'about.html'
+  'settings' : 'components/settings.html',
+  'about' : 'components/about.html',
 };

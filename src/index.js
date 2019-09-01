@@ -11,6 +11,7 @@ const store = new Store({schema});
 
 // Import custom stuff
 const { ENUM_ID, MENU_ITEM_SCRIPTS } = require('./menu-item-scripts');
+const NOTIFICATIONS = document.querySelector('#notification-textarea');
 
 const selectSADirectory = () => {
   const selectedPath = dialog.showOpenDialogSync({properties: ['openDirectory']});
@@ -18,15 +19,15 @@ const selectSADirectory = () => {
   validateDirectory();
 };
 
-const rememberLastMenu = id => store.set('lastMenu', id);
-
 // Activate the body to show the manager only once we found the path
 const activateBody = () => {
   const lastMenu = store.get('lastMenu');
-  document.querySelector('#validation-module').style.display = 'none';
-  document.querySelector('#main-body').hidden = false;
-  if (lastMenu !== undefined) {
+  document.querySelector('#find-sa-directory').disabled = true;
+  toggleMenuBtns();
+  if (lastMenu !== undefined && lastMenu !== 'spec_notification') {
     loadMenuItem(lastMenu);
+  } else if (lastMenu === 'spec_notification') {
+    loadNotification();
   }
 };
 
@@ -40,7 +41,8 @@ const validateDirectory = () => {
   try {
     files = fs.readdirSync(gtaSAPath);
   } catch (err) {
-    console.log('Can not read from directory: ' + err);
+    addNotification('Can not read from directory! You need to select the GTA SA folder! ' + err);
+    document.querySelector('#find-sa-directory').disabled = false;
     return;
   }
   
@@ -75,33 +77,51 @@ const validateDirectory = () => {
       ) {
         // If the file does not have a back up and the 'file' is not a directory and the file is
         // not already a backup file. Proceed!
-        const notification = document.createElement('div');
-        const notificationText = document.createTextNode(
-          'Backed up file, ' + scriptsDir + '\\' + file);
-        notification.setAttribute('class', 'notification');
-        notification.appendChild(notificationText);
-        // This is where we actually copy the file, the rest is just there to notify the user!
+        addNotification('Backed up file, ' + scriptsDir + '\\' + file);
         fs.copyFileSync(scriptsDir + '\\' + file, scriptsDir + '\\' + file + '.bak');
-        document.querySelector('#validation-textarea').appendChild(notification);
       }
     }
     // Once the files has being backed up, we are going to activate the main GUI
     activateBody();
   } else {
-    console.log('Was unable to find the data/scripts directory in the supplied directory!');
+    addNotification('Was unable to find the data/scripts directory in the supplied directory!');
+    document.querySelector('#find-sa-directory').disabled = false;
   }
 };
 
 const loadMenuItem = id => {
-  rememberLastMenu(id);
-
+  store.set('lastMenu', id);
+  document.querySelector('#internal-body').style.display = 'flex';
+  document.querySelector('#notification').style.display = 'none';
   fs.readFile(__dirname + '\\' + ENUM_ID[id], (err, data) => {
     document.querySelector('#internal-body').innerHTML = data;
     MENU_ITEM_SCRIPTS[id]();
   });
 };
 
+const loadNotification = () => {
+  store.set('lastMenu', 'spec_notification');
+  document.querySelector('#internal-body').style.display = 'none';
+  document.querySelector('#notification').style.display = 'flex';
+};
+
+const addNotification = (msg) => {
+  const notification = document.createElement('div');
+  const notificationText = document.createTextNode(msg);
+  notification.setAttribute('class', 'notification');
+  notification.appendChild(notificationText);
+  NOTIFICATIONS.appendChild(notification);
+};
+
+const toggleMenuBtns = () => {
+  const btnElements = document.querySelectorAll('#internal-menu ul li button');
+  for (let btn of btnElements) {
+    btn.disabled = !btn.disabled;
+  }
+};
+
 document.querySelector('#find-sa-directory').addEventListener('click', selectSADirectory);
+document.querySelector('#btn-notifications').addEventListener('click', loadNotification);
 document.querySelector('#btn-settings').addEventListener('click', () => loadMenuItem('settings'));
 document.querySelector('#btn-about').addEventListener('click', () => loadMenuItem('about'));
 

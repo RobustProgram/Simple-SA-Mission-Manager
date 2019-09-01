@@ -3,33 +3,33 @@
   <head>
     <meta charset="UTF-8">
     <title>GTA SA Mission Manager</title>
-    <link rel="stylesheet" href="general.css" />
-    <link rel="stylesheet" href="id.css" />
-    <link rel="stylesheet" href="class.css" />
+    <link rel="stylesheet" href="styles/general.css" />
+    <link rel="stylesheet" href="styles/id.css" />
+    <link rel="stylesheet" href="styles/class.css" />
     <link href="fonts/raleway/font-raleway.css" rel="stylesheet">
     <link href="fonts/montserrat/font-montserrat.css" rel="stylesheet">
   </head>
   <body>
-    <div id="validation-module">
-      <div id="validation-textarea">
-        <div class="notification">The file directory does not point to a valid GTA SA directory!</div>
-      </div>
-      <div>
-        <button id="find-sa-directory">Find GTA SA Directory</button>
-      </div>
-    </div>
-    <div id="main-body" hidden>
+    <div id="main-body">
       <div id="internal-menu">
         <span>GTA SA Mission Manager</span>
         <span>|</span>
         <ul>
-          <li><button>Home</button></li>
-          <li><button>Missions</button></li>
-          <li><button id="btn-settings">Settings</button></li>
-          <li><button id="btn-about">About</button></li>
+          <li><button disabled>Home</button></li>
+          <li><button disabled>Missions</button></li>
+          <li><button id="btn-settings" disabled>Settings</button></li>
+          <li><button id="btn-about" disabled>About</button></li>
+          <li><button id="btn-notifications" disabled>Notifications</button></li>
         </ul>
       </div>
       <div id="internal-body">
+      </div>
+      <div id="notification">
+        <div id="notification-textarea">
+        </div>
+        <div>
+          <button id="find-sa-directory" disabled>Find GTA SA Directory</button>
+        </div>
       </div>
     </div>
     <script>require('./index.js');</script>

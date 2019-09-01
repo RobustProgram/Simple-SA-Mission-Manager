@@ -1,23 +1,21 @@
+/********* Form styles ********/
+.form { width: 100%; }
 .form .form-group {
   display: flex;
   margin-bottom: 8px;
 }
-
 .form .form-group .form-label {
   font-size: 14px;
   width: 25%;
 }
-
 .form .form-group input {
   width: 75%;
 }
-
 .form .form-btn {
   border: 1px solid #001f3f;
   background-color: #0074D9;
   color: #FFFFFF;
 }
-
 .form .form-btn:hover {
   background: #001f3f;
   cursor: pointer;

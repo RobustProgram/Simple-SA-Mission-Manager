@@ -4,6 +4,7 @@
 }
 
 .form .form-group .form-label {
+  font-size: 14px;
   width: 25%;
 }
 
@@ -15,8 +16,6 @@
   border: 1px solid #001f3f;
   background-color: #0074D9;
   color: #FFFFFF;
-  font-family: "Raleway", sans-serif;
-  padding: 7px 25px;
 }
 
 .form .form-btn:hover {

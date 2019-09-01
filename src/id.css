@@ -21,6 +21,7 @@
   border: none;
   font-family: "Raleway", sans-serif;
   font-size: 15px;
+  padding: 0px 10px;
 }
 
 #internal-menu ul li button:hover {

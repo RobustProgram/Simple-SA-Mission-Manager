@@ -1,11 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const Store = require('electron-store');
-const schema = {
-  gtaSALocation: {
-    type: 'string'
-  }
-};
-const store = new Store({schema});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -65,23 +58,3 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on('getSAPath', (event) => {
-  console.log('Pinged!');
-  event.returnValue = store.get('gtaSALocation');
-});
-
-// Async call to update SA Path
-ipcMain.on('updateSAPath', (event, message) => {
-  console.log('Saving SA Path');
-  store.set('gtaSALocation', message);
-});
-
-ipcMain.on('getLastMenu', (event) => {
-  console.log(store.get('lastMenu'));
-  event.returnValue = store.get('lastMenu');
-})
-
-ipcMain.on('rememberLastMenu', (event, message) => {
-  console.log('Remembering Last Menu');
-  store.set('lastMenu', message);
-});

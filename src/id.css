@@ -1,3 +1,4 @@
+/*********** MENU CODE ***********/
 #internal-menu {
   background-color: burlywood;
   display: flex;
@@ -32,4 +33,22 @@
 #internal-body {
   margin: auto;
   padding: 1.5rem 2rem;
+}
+
+/********* LOADING SCREEN *********/
+#validation-module {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+}
+#validation-module div {margin: 5px;}
+#validation-module #validation-textarea {
+  background-color: white;
+  border: 1px solid black;
+  padding: 5px;
+  flex-grow: 1;
+}
+#validation-module #validation-textarea .notification{
+  font-family: 'Courier New';
+  font-size: 12px;
 }

@@ -1,4 +1,5 @@
 const { dialog } = require('electron').remote;
+const path = require('path');
 const fs = require('fs');
 const Store = require('electron-store');
 const schema = {
@@ -22,7 +23,7 @@ const rememberLastMenu = id => store.set('lastMenu', id);
 // Activate the body to show the manager only once we found the path
 const activateBody = () => {
   const lastMenu = store.get('lastMenu');
-  document.querySelector('#validation-module').hidden = true;
+  document.querySelector('#validation-module').style.display = 'none';
   document.querySelector('#main-body').hidden = false;
   if (lastMenu !== undefined) {
     loadMenuItem(lastMenu);
@@ -32,8 +33,8 @@ const activateBody = () => {
 const validateDirectory = () => {
   const gtaSAPath = store.get('gtaSALocation');
   let files;
-  let dataFiles;
   let dataDir;
+  let scriptsDir;
   let foundGTASA = false;
 
   try {
@@ -50,21 +51,41 @@ const validateDirectory = () => {
       dataDir = gtaSAPath + '\\' + file;
       if (fs.statSync(dataDir).isDirectory()) {
         // This confirms that we are inside the data directory. Find the directory called script
-        dataFiles = fs.readdirSync(dataDir);
-        for (let dataFile of dataFiles) {
+        for (let dataFile of fs.readdirSync(dataDir)) {
           if (dataFile === 'script' && fs.statSync(dataDir + '\\' + dataFile).isDirectory()) {
             // Found the script folder inside data
-            store.set('gtaSAScripts', dataDir + '\\' + dataFile)
+            scriptsDir = dataDir + '\\' + dataFile;
+            store.set('gtaSAScripts', scriptsDir);
             foundGTASA = true;
-            break;
+            break; // Exit early to save performance. However, we are using electron
           }
         }
-        break;
+        break; // Exit early to save performance. However, we are using electron
       }
     }
   }
 
   if (foundGTASA) {
+    // We can confirm we found the scripts folder. Time to back up all of the files in the folder
+    for (let file of fs.readdirSync(scriptsDir)) {
+      if (
+        !fs.existsSync(scriptsDir + '\\' + file + '.bak') &&
+        !fs.statSync(scriptsDir + '\\' + file).isDirectory() &&
+        path.extname(file) !== '.bak'
+      ) {
+        // If the file does not have a back up and the 'file' is not a directory and the file is
+        // not already a backup file. Proceed!
+        const notification = document.createElement('div');
+        const notificationText = document.createTextNode(
+          'Backed up file, ' + scriptsDir + '\\' + file);
+        notification.setAttribute('class', 'notification');
+        notification.appendChild(notificationText);
+        // This is where we actually copy the file, the rest is just there to notify the user!
+        fs.copyFileSync(scriptsDir + '\\' + file, scriptsDir + '\\' + file + '.bak');
+        document.querySelector('#validation-textarea').appendChild(notification);
+      }
+    }
+    // Once the files has being backed up, we are going to activate the main GUI
     activateBody();
   } else {
     console.log('Was unable to find the data/scripts directory in the supplied directory!');

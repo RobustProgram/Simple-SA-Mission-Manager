@@ -68,6 +68,7 @@ const validateDirectory = () => {
   }
 
   if (foundGTASA) {
+    const textDir = gtaSAPath + '\\text';
     // We can confirm we found the scripts folder. Time to back up all of the files in the folder
     for (let file of fs.readdirSync(scriptsDir)) {
       if (
@@ -79,6 +80,20 @@ const validateDirectory = () => {
         // not already a backup file. Proceed!
         addNotification('Backed up file, ' + scriptsDir + '\\' + file);
         fs.copyFileSync(scriptsDir + '\\' + file, scriptsDir + '\\' + file + '.bak');
+      }
+    }
+    // Also, since we are 99% we are in a GTA SA directory, we can also access the gxt files and
+    // also back them up.
+    for (let file of fs.readdirSync(textDir)) {
+      if (
+        !fs.existsSync(textDir + '\\' + file + '.bak') &&
+        !fs.statSync(textDir + '\\' + file).isDirectory() &&
+        path.extname(file) !== '.bak'
+      ) {
+        // If the file does not have a back up and the 'file' is not a directory and the file is
+        // not already a backup file. Proceed!
+        addNotification('Backed up file, ' + textDir + '\\' + file);
+        fs.copyFileSync(textDir + '\\' + file, textDir + '\\'+ file + '.bak');
       }
     }
     // Once the files has being backed up, we are going to activate the main GUI

@@ -1,4 +1,5 @@
 const { app, dialog } = require('electron').remote;
+const JSZip = require("jszip");
 const path = require('path');
 const fs = require('fs');
 const Store = require('electron-store');
@@ -30,8 +31,46 @@ module.exports.MENU_ITEM_SCRIPTS = {
   },
   'missions' : () => {
     const checkMissionFolder = () => {
-      if (!fs.existsSync(app.getPath('userData') + '\\missions')) {
-        fs.mkdirSync(app.getPath('userData') + '\\missions');
+      const missionDir = app.getPath('userData') + '\\missions';
+      if (!fs.existsSync(missionDir)) {
+        fs.mkdirSync(missionDir);
+      } else {
+        for(let file of fs.readdirSync(missionDir)) {
+          fs.readFile(missionDir + '\\' + file, async (err, data) => {
+            if (err) throw err;
+            JSZip.loadAsync(data).then(zip => {
+              zip.file('info.json').async('string').then(data => {
+                const missionInfo = JSON.parse(data);
+                const mission = document.createElement('div');
+                const missionName = document.createElement('div');
+                const missionDesc = document.createElement('div');
+                const missionAuthor = document.createElement('div');
+                const missionVersion = document.createElement('div');
+                let missionDisplay;
+
+                missionName.innerText = missionInfo.name;
+                missionDesc.innerText = missionInfo.about;
+                missionAuthor.innerText = missionInfo.author;
+                missionVersion.innerText = missionInfo.version;
+                mission.className = 'mission';
+                missionName.className = 'name';
+                missionDesc.className = 'desc';
+                missionAuthor.className = 'author';
+                missionVersion.className = 'version';
+
+                mission.appendChild(missionName);
+                mission.appendChild(missionDesc);
+                mission.appendChild(missionAuthor);
+                mission.appendChild(missionVersion);
+
+                missionDisplay = document.querySelector('#mission-display');
+                if (missionDisplay != undefined) {
+                  missionDisplay.appendChild(mission);
+                }
+              });
+            });
+          });
+        }
       }
     };
     const addMission = () => {
@@ -54,6 +93,7 @@ module.exports.MENU_ITEM_SCRIPTS = {
       if (canCopyMission) {
         fs.copyFileSync(missionPack[0], missionPackLoaded);
         addNotification('Loaded mission pack: ' + missionPackLoaded);
+        checkMissionFolder();
       } else {
         addNotification('Can not load mission pack!');
       }

@@ -20,3 +20,31 @@
   background: #001f3f;
   cursor: pointer;
 }
+
+/******** Mission Display Styles ********/
+#mission-display .mission {
+  margin-bottom: 10px;
+}
+
+#mission-display .mission .name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#mission-display .mission .desc {
+  font-size: 14px;
+}
+
+#mission-display .mission .author {
+  font-size: 14px;
+  text-align: right;
+}
+
+#mission-display .mission .version {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+#mission-display .mission .version:before {
+  content: "Version: ";
+}

@@ -11,7 +11,7 @@ const store = new Store({schema});
 
 // Import custom stuff
 const { ENUM_ID, MENU_ITEM_SCRIPTS } = require('./menu-item-scripts');
-const NOTIFICATIONS = document.querySelector('#notification-textarea');
+const { addNotification } = require('./utilities');
 
 const selectSADirectory = () => {
   const selectedPath = dialog.showOpenDialogSync({properties: ['openDirectory']});
@@ -120,14 +120,6 @@ const loadNotification = () => {
   document.querySelector('#notification').style.display = 'flex';
 };
 
-const addNotification = (msg) => {
-  const notification = document.createElement('div');
-  const notificationText = document.createTextNode(msg);
-  notification.setAttribute('class', 'notification');
-  notification.appendChild(notificationText);
-  NOTIFICATIONS.appendChild(notification);
-};
-
 const toggleMenuBtns = () => {
   const btnElements = document.querySelectorAll('#internal-menu ul li button');
   for (let btn of btnElements) {
@@ -137,6 +129,7 @@ const toggleMenuBtns = () => {
 
 document.querySelector('#find-sa-directory').addEventListener('click', selectSADirectory);
 document.querySelector('#btn-notifications').addEventListener('click', loadNotification);
+document.querySelector('#btn-missions').addEventListener('click', () => loadMenuItem('missions'));
 document.querySelector('#btn-settings').addEventListener('click', () => loadMenuItem('settings'));
 document.querySelector('#btn-about').addEventListener('click', () => loadMenuItem('about'));
 

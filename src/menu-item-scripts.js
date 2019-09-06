@@ -1,4 +1,4 @@
-const { app, dialog } = require('electron').remote;
+const { app, dialog, shell } = require('electron').remote;
 const JSZip = require('jszip');
 const path = require('path');
 const fs = require('fs');
@@ -14,7 +14,10 @@ const store = new Store({schema});
 const { addNotification } = require('./utilities');
 
 const startMission = fileName => {
-  console.log('Launching mission pack ', fileName);
+  // Here, we are going to replace the scm / img / gxt files with what is inside the mission packs
+  // then we are going to launch the game
+  const gtaSAPath = store.get('gtaSALocation');
+  shell.openItem(gtaSAPath + '\\gta_sa.exe');
 }
 
 // Create the list of scripts to run when a menu item is clicked

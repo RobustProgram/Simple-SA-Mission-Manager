@@ -16,8 +16,60 @@ const { addNotification } = require('./utilities');
 const startMission = fileName => {
   // Here, we are going to replace the scm / img / gxt files with what is inside the mission packs
   // then we are going to launch the game
+  const missionDir = app.getPath('userData') + '\\missions';
   const gtaSAPath = store.get('gtaSALocation');
-  shell.openItem(gtaSAPath + '\\gta_sa.exe');
+  const gtaSAScript = store.get('gtaSAScripts');
+  // Proceed to replace the appropriate files
+  const missionPack = fs.readFileSync(missionDir + '\\' + fileName);
+  JSZip.loadAsync(missionPack).then(zip => {
+    const loadGXT = new Promise((resolve, reject) => {
+      zip.file('american.gxt').async('uint8array')
+        .then(data => {
+          fs.writeFile(gtaSAPath + '\\text\\american.gxt', data, err => {
+            console.log('lol');
+            if (err) reject(err);
+            resolve(true);
+          });
+        })
+        .catch(err => reject(err));
+    });
+
+    const loadSCM = new Promise((resolve, reject) => {
+      zip.file('main.scm').async('uint8array')
+        .then(data => {
+          fs.writeFile(gtaSAScript + '\\main.scm', data, err => {
+            if (err) reject(err);
+            resolve(true);
+          });
+        })
+        .catch(err => reject(err));
+    });
+
+    // Load the script.img file but since this is optional, we do not need to hard fail if it
+    // doesn't exist.
+    const loadIMG = new Promise((resolve, reject) => {
+      try {
+        zip.file('script.img').async('uint8array').then(data => {
+          fs.writeFile(gtaSAScript + '\\script.img', data, err => {
+            if (err) reject(err);
+            resolve(true);
+          });
+        });
+      } catch (err) {
+        if (err instanceof TypeError) {
+          // Does not exist. However, we do not need to hard fail as this is optional
+          resolve(false);
+        } else {
+          reject(err);
+        }
+      }
+    });
+
+    Promise.all([loadGXT, loadSCM, loadIMG]).then(() => {
+      // The files have being loaded and now it is time to run the game!
+      shell.openItem(gtaSAPath + '\\gta_sa.exe');
+    });
+  });
 }
 
 // Create the list of scripts to run when a menu item is clicked

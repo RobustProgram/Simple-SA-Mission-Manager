@@ -13,6 +13,36 @@ const store = new Store({schema});
 
 const { addNotification } = require('../utilities');
 
+const loadMissionFile = (zipObj, fileName, directory, optional = false) => {
+  return new Promise((resolve, reject) => {
+    // Before we start going through the zip file, let's check if we can write to the original file
+    fs.access(directory + '\\' + fileName, fs.constants.W_OK, err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      try {
+        zipObj.file(fileName).async('uint8array')
+        .then(data => {
+          fs.writeFile(directory + '\\' + fileName, data, err => {
+            if (err) reject(err);
+            resolve(true);
+          });
+        })
+        .catch(err => reject(err));
+      } catch (err) {
+        if (err instanceof TypeError && optional) {
+          // Does not exist. However, we do not need to hard fail as this is optional
+          resolve(false);
+        } else {
+          reject(err);
+        }
+      }
+    });
+  });
+};
+
 const startMission = fileName => {
   // Here, we are going to replace the scm / img / gxt files with what is inside the mission packs
   // then we are going to launch the game
@@ -24,47 +54,9 @@ const startMission = fileName => {
   // Proceed to replace the appropriate files
   const missionPack = fs.readFileSync(missionDir + '\\' + fileName);
   JSZip.loadAsync(missionPack).then(zip => {
-    const loadGXT = new Promise((resolve, reject) => {
-      zip.file('american.gxt').async('uint8array')
-        .then(data => {
-          fs.writeFile(gtaSAText + '\\american.gxt', data, err => {
-            if (err) reject(err);
-            resolve(true);
-          });
-        })
-        .catch(err => reject(err));
-    });
-
-    const loadSCM = new Promise((resolve, reject) => {
-      zip.file('main.scm').async('uint8array')
-        .then(data => {
-          fs.writeFile(gtaSAScript + '\\main.scm', data, err => {
-            if (err) reject(err);
-            resolve(true);
-          });
-        })
-        .catch(err => reject(err));
-    });
-
-    // Load the script.img file but since this is optional, we do not need to hard fail if it
-    // doesn't exist.
-    const loadIMG = new Promise((resolve, reject) => {
-      try {
-        zip.file('script.img').async('uint8array').then(data => {
-          fs.writeFile(gtaSAScript + '\\script.img', data, err => {
-            if (err) reject(err);
-            resolve(true);
-          });
-        });
-      } catch (err) {
-        if (err instanceof TypeError) {
-          // Does not exist. However, we do not need to hard fail as this is optional
-          resolve(false);
-        } else {
-          reject(err);
-        }
-      }
-    });
+    const loadGXT = loadMissionFile(zip, 'american.gxt', gtaSAText);
+    const loadSCM = loadMissionFile(zip, 'main.scm', gtaSAScript);
+    const loadIMG = loadMissionFile(zip, 'script.img', gtaSAScript);
 
     Promise.all([loadGXT, loadSCM, loadIMG]).then(() => {
       // The files have being loaded and now it is time to run the game!

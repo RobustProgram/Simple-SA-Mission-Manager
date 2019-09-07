@@ -19,14 +19,15 @@ const startMission = fileName => {
   const missionDir = app.getPath('userData') + '\\missions';
   const gtaSAPath = store.get('gtaSALocation');
   const gtaSAScript = store.get('gtaSAScripts');
+  const gtaSAText = store.get('gtaSAText');
+  
   // Proceed to replace the appropriate files
   const missionPack = fs.readFileSync(missionDir + '\\' + fileName);
   JSZip.loadAsync(missionPack).then(zip => {
     const loadGXT = new Promise((resolve, reject) => {
       zip.file('american.gxt').async('uint8array')
         .then(data => {
-          fs.writeFile(gtaSAPath + '\\text\\american.gxt', data, err => {
-            console.log('lol');
+          fs.writeFile(gtaSAText + '\\american.gxt', data, err => {
             if (err) reject(err);
             resolve(true);
           });
@@ -81,8 +82,10 @@ module.exports.MENU_ITEM_SCRIPTS = {
 
     const gtaSAPath = store.get('gtaSALocation');
     const gtaSAScript = store.get('gtaSAScripts');
+    const gtaSAText = store.get('gtaSAText');
     document.querySelector('#sa-directory').value = gtaSAPath;
     document.querySelector('#sa-scripts').value = gtaSAScript;
+    document.querySelector('#sa-texts').value = gtaSAText;
 
     document.querySelector('#save-settings').addEventListener('click', saveSettings);
   },

@@ -45,7 +45,7 @@ const validateDirectory = () => {
     document.querySelector('#find-sa-directory').disabled = false;
     return;
   }
-  
+
   // After we have read through the files, check each of the files to find the data folder
   for (let file of files) {
     if (file === 'data') {
@@ -68,7 +68,9 @@ const validateDirectory = () => {
   }
 
   if (foundGTASA) {
+    // If we found the gtaSAPath, we are going to assume we are in it and just save the text folder
     const textDir = gtaSAPath + '\\text';
+    store.set('gtaSAText', textDir);
     // We can confirm we found the scripts folder. Time to back up all of the files in the folder
     for (let file of fs.readdirSync(scriptsDir)) {
       if (

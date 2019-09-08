@@ -8,39 +8,6 @@
   display: none;
   flex-grow: 1;
   padding: 1.5rem 3%;
-  width: 94%;
-}
-
-/*********** MENU CODE ***********/
-#internal-menu {
-  background-color: #deb887;
-  display: flex;
-  padding: 1rem;
-}
-
-#internal-menu span { margin-right: 5px; }
-#internal-menu ul {
-  margin: 0px;
-  padding: 0px;
-  list-style: none;
-}
-#internal-menu ul li {
-  display: inline-block;
-}
-#internal-menu ul li button {
-  background: transparent;
-  border: none;
-  font-family: "Raleway", sans-serif;
-  font-size: 15px;
-  padding: 0px 10px;
-}
-#internal-menu ul li button:hover {
-  color: white;
-  cursor: pointer;
-}
-#internal-menu ul li button:disabled {
-  color: #ffe6c7;
-  cursor: not-allowed;
 }
 
 /********* LOADING SCREEN *********/

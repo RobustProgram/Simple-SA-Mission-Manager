@@ -122,7 +122,8 @@ module.exports.checkMissionFolder = () => {
             const missionDesc = document.createElement('div');
             const missionAuthor = document.createElement('div');
             const missionVersion = document.createElement('div');
-            const missionLaunch = document.createElement('button');
+            const missionLaunchWrapper = document.createElement('div');
+            const missionLaunch = document.createElement('a');
             let missionDisplay;
 
             // Set up the elements for the mission info area
@@ -130,23 +131,25 @@ module.exports.checkMissionFolder = () => {
             missionDesc.innerText = missionInfo.about;
             missionAuthor.innerText = missionInfo.author;
             missionVersion.innerText = missionInfo.version;
-            missionLaunch.innerHTML = 'Launch Mission';
+            missionLaunch.innerHTML = '<i class="fas fa-play"></i>&nbsp;&nbsp;Launch Mission';
             mission.className = 'mission';
             missionName.className = 'name';
             missionDesc.className = 'desc';
             missionAuthor.className = 'author';
             missionVersion.className = 'version';
-            missionLaunch.className = 'launch';
+            missionLaunchWrapper.className = 'launch';
+            missionLaunch.className = 'button is-primary is-rounded';
 
             // Add the event listener
             missionLaunch.addEventListener('click', () => startMission(file));
 
             // Add the elements of the display to the mission info section
+            missionLaunchWrapper.appendChild(missionLaunch);
             mission.appendChild(missionName);
             mission.appendChild(missionDesc);
             mission.appendChild(missionAuthor);
             mission.appendChild(missionVersion);
-            mission.appendChild(missionLaunch);
+            mission.appendChild(missionLaunchWrapper);
 
             // Display it
             missionDisplay = document.querySelector('#mission-display');

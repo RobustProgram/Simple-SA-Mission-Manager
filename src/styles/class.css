@@ -50,14 +50,5 @@
 }
 
 #mission-display .mission .launch {
-  border: 1px solid #001f3f;
-  background-color: #0074D9;
-  color: #FFFFFF;
-  margin-top: 10px;
-  width: 100%;
-}
-
-#mission-display .mission .launch:hover {
-  background: #001f3f;
-  cursor: pointer;
+  text-align: right;
 }

@@ -108,11 +108,11 @@ const validateDirectory = () => {
 
 const loadMenuItem = id => {
   store.set('lastMenu', id);
-  document.querySelector('#internal-body').style.display = 'flex';
-  document.querySelector('#notification').style.display = 'none';
   fs.readFile(__dirname + '\\' + ENUM_ID[id], (err, data) => {
     document.querySelector('#internal-body').innerHTML = data;
     MENU_ITEM_SCRIPTS[id]();
+    document.querySelector('#internal-body').style.display = 'flex';
+    document.querySelector('#notification').style.display = 'none';
   });
 };
 

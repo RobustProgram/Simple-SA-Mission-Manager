@@ -18,6 +18,15 @@ const loadMissionFile = (zipObj, fileName, directory, optional = false) => {
     // Before we start going through the zip file, let's check if we can write to the original file
     fs.access(directory + '\\' + fileName, fs.constants.W_OK, err => {
       if (err) {
+        const messageBoxOptions = {
+          type: 'info',
+          buttons: ['Ok'],
+          default: 0,
+          title: 'Read Only',
+          message: `${fileName} is set to be read only.`,
+          detail: `Disable the readonly property on ${fileName} to continue!`
+        };
+        dialog.showMessageBoxSync(null, messageBoxOptions);
         reject(err);
         return;
       }

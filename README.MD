@@ -10,3 +10,14 @@ The info.json file should contain the following json structure,
   "version" : "1.0.0"
 }
 ```
+
+## Running the Program
+Since this uses electron forge, you run the production version using the following command
+
+#### yarn start
+
+You can also build the whole program using
+
+#### yarn make
+
+For more information regarding electron forge, you can visit their website [here](https://www.electronforge.io/)

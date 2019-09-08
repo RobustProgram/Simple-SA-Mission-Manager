@@ -27,3 +27,9 @@
   font-family: 'Courier New';
   font-size: 12px;
 }
+
+/********* SETTINGS *********/
+#settings-form { width: 100%; }
+#save-settings-wrapper {
+  text-align: right;
+}

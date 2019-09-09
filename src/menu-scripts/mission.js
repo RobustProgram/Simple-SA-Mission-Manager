@@ -13,7 +13,11 @@ const store = new Store({schema});
 
 const { addNotification } = require('../utilities');
 
-const loadMissionFile = (zipObj, fileName, directory, optional = false) => {
+/*
+ * This is a helper function that does the actual replacing of the files and handles the errors if
+ * any should arise.
+ */
+function loadMissionFile(zipObj, fileName, directory, optional = false) {
   return new Promise((resolve, reject) => {
     // Before we start going through the zip file, let's check if we can write to the original file
     fs.access(directory + '\\' + fileName, fs.constants.W_OK, err => {
@@ -35,8 +39,10 @@ const loadMissionFile = (zipObj, fileName, directory, optional = false) => {
         zipObj.file(fileName).async('uint8array')
         .then(data => {
           fs.writeFile(directory + '\\' + fileName, data, err => {
-            if (err) reject(err);
-            resolve(true);
+            if (err)
+              reject(err);
+            else
+              resolve(true);
           });
         })
         .catch(err => reject(err));
@@ -50,9 +56,13 @@ const loadMissionFile = (zipObj, fileName, directory, optional = false) => {
       }
     });
   });
-};
+}
 
-const startMission = fileName => {
+/*
+ * This function will take the filename of the mission pack and begin to override the original
+ * files.
+ */
+function startMission(fileName) {
   // Here, we are going to replace the scm / img / gxt files with what is inside the mission packs
   // then we are going to launch the game
   const missionDir = app.getPath('userData') + '\\missions';
@@ -72,9 +82,9 @@ const startMission = fileName => {
       shell.openItem(gtaSAPath + '\\gta_sa.exe');
     });
   });
-};
+}
 
-module.exports.addMission = () => {
+module.exports.addMission = function() {
   const missionPack = dialog.showOpenDialogSync({properties: ['openFile']});
   const missionPackName = path.basename(missionPack[0]);
   const missionPackLoaded = app.getPath('userData') + '\\missions\\' + missionPackName;
@@ -100,7 +110,7 @@ module.exports.addMission = () => {
   }
 };
 
-module.exports.checkMissionFolder = () => {
+module.exports.checkMissionFolder = function() {
   // Here, we are going to do two things, check if a mission folder exists. If it doesn't exist
   // create the folder.
   const missionDir = app.getPath('userData') + '\\missions';
